@@ -1,0 +1,27 @@
+workspace:
+  base: /go
+pipeline:
+  build:
+    environment:
+      - CGO_ENABLED=0
+    image: golang:alpine
+    commands:
+      - apk update && apk add bash make git
+      - make deps vet build
+  publish:
+    image: plugins/docker
+    repo: majest/dnsserver
+    tags:
+      - latest
+    when:
+      branch: master
+  notify:
+    image: plugins/slack
+    channel: dev
+    username: drone
+    when:
+      status: [ success, failure ]
+    template: >
+      Build started by {{ build.author }}:<https://github.com/{{ repo.owner }}/{{ repo.name }}|{{ repo.name }}>
+      <https://github.com/{{ repo.owner }}/{{ repo.name }}/tree/{{ build.commit }}|{{ build.branch }}>/<https://github.com/{{ repo.owner }}/{{ repo.name }}/commit/{{ build.commit }}|{{ build.commit }}>
+      Status:<http://drone.klubzy.com/{{ repo.owner }}/{{ repo.name }}/{{ build.number }}|{{ build.status }}>

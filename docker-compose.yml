@@ -1,0 +1,12 @@
+version: '3'
+services:
+  scraper:
+    privileged: true
+    image: majest/dnsserver
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    restart: unless-stopped
+    environment:
+      ZONE: com
+      DOMAINS: "test=127.0.0.1"
