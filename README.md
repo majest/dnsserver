@@ -1,7 +1,7 @@
-Simple DNS Server wrapper
+Simple DNS Server
 ==========
 
-Simple DNS server using github.com/docker/dnsserver
+Simple DNS server written using github.com/docker/dnsserver
 
 Run using docker:
 
